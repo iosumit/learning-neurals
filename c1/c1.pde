@@ -1,11 +1,24 @@
 Perceptron p;
+Point[] points = new Point[100];
+
 void setup(){
-  size(200, 200);
-  p = new Perceptron();
-  float[] ip = {-1, 0.5};
-  int guess = p.guess(ip);
+   size(400, 400);
+   p = new Perceptron();
+   
+   for(int i=0; i<points.length;i++){
+     points[i] = new Point();
+   }
+   
+   
+   float[] ip = {-1, 0.5};
+   int guess = p.guess(ip);
   println(guess);
 }
-void loop(){
-  
+void draw(){
+  background(255);
+  stroke(0);
+  line(0, 0, width, height);
+  for(Point p : points){
+    p.show();
+  }
 }
