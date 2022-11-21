@@ -16,6 +16,6 @@ class Point{
     } else {
       fill(0);
     }
-    ellipse(x, y, 8, 8);
+    ellipse(x, y, 32, 32);
   }
 }
