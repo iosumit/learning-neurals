@@ -3,10 +3,11 @@ int sign(float n){
 }
  
 class Perceptron{
-  float[] weights = new float[2];
-  float lr = 0.1;
+  float[] weights;
+  float lr = 0.01;
   
-  Perceptron(){
+  Perceptron(int n){
+    weights = new float[n];
     for(int i=0; i<weights.length; i++){
       weights[i] = random(-1, 1);
     }
@@ -25,5 +26,15 @@ class Perceptron{
     for(int i=0; i<weights.length; i++){
       weights[i] += error * lr * ip[i];
     }
+  }
+  float guessY(float x){
+    // w0.x + w1.y + w2.b = 0;
+    // w1.y  = - w0.x - w2.b
+    // y =  - (w0.x + w2.b)/w1;
+    float w0 = weights[0];
+    float w1 = weights[1];
+    float w2 = weights[2];
+    
+    return -(w0*x+w2)/w1;
   }
 }
