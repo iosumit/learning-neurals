@@ -38,8 +38,7 @@ void draw(){
     trainingIndex = 0;
 }
 void mousePressed(){
-  for(Point pt : points){
-    float[] inputs = { pt.x,  pt.y};
-    brain.train(inputs,pt.label);
-  }
+  float[] inputs = { mouseX,  mouseY};
+  int op = brain.guess(inputs);
+  println(op);
 }
