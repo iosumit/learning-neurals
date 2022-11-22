@@ -1,5 +1,5 @@
 float f(float x){
-  return -0.3 * x - 0.2;
+  return 0.89 * x - 0.1;
 }
 class Point{
   float x, y, bias=1;
