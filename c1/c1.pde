@@ -17,7 +17,7 @@ void setup(){
 void draw(){
   background(255);
   stroke(0);
-  line(0, 0, width, height);
+  line(0, height, width, 0);
   for(Point pt : points){
     pt.show();
   }
@@ -28,7 +28,7 @@ void draw(){
     else
       fill(255,0,0);
     noStroke();
-    ellipse(pt.x, pt.y, 16, 16);
+    ellipse(pt.pixelX(), pt.pixelY(), 16, 16);
   }
   Point trainpt = points[trainingIndex];
   float[] inputs = { trainpt.x,  trainpt.y};
