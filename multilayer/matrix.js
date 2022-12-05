@@ -61,10 +61,10 @@ class Matrix {
         }
         return result;
     }
-    multiply(n) {
+    map(func) {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.cols; j++) {
-                this.data[i][j] *= n;
+                this.data[i][j] = func(this.data[i][j]);
             }
         }
     }
