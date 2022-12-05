@@ -77,6 +77,20 @@ class Matrix {
         }
         return result;
     }
+    static subtract(m1, m2) {
+        if (m1.rows != m2.rows || m1.cols != m2.cols) {
+            console.log(m1, m2);
+            console.log("Columns & Rows of A must be Rows of B")
+            return undefined;
+        }
+        let result = new Matrix(m1.rows, m1.cols);
+        for (let i = 0; i < result.rows; i++) {
+            for (let j = 0; j < result.cols; j++) {
+                result.data[i][j] = m1.data[i][j] - m2.data[i][j];
+            }
+        }
+        return result;
+    }
     map(func) {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.cols; j++) {

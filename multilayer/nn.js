@@ -29,4 +29,20 @@ class NeuralNetwork {
         outputs.map(sigmoid);
         return outputs.toArray();
     }
+    train(inputs_arr, targets) {
+        let outputs = this.feedForward(inputs_arr);
+        // ERROR = TARGET - OUTPUTS
+        // let inputs = Matrix.fromArray(inputs_arr);
+        outputs = Matrix.fromArray(outputs);
+        targets = Matrix.fromArray(targets);
+
+        let output_error = Matrix.subtract(targets, outputs);
+
+        let who_t = Matrix.transpose(this.weight_ho);
+        let hidden_errors = Matrix.multiply(who_t, output_error);
+
+        outputs.print();
+        targets.print();
+        hidden_errors.print()
+    }
 } 
