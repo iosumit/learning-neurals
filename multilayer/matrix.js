@@ -48,6 +48,21 @@ class Matrix {
             }
         }
     }
+    multiply(n) {
+        if (n instanceof Matrix) {
+            for (let i = 0; i < this.rows; i++) {
+                for (let j = 0; j < this.cols; j++) {
+                    this.data[i][j] *= n.data[i][j];
+                }
+            }
+        } else {
+            for (let i = 0; i < this.rows; i++) {
+                for (let j = 0; j < this.cols; j++) {
+                    this.data[i][j] *= n;
+                }
+            }
+        }
+    }
 
     static transpose(m1) {
         let result = new Matrix(m1.cols, m1.rows);
@@ -97,6 +112,15 @@ class Matrix {
                 this.data[i][j] = func(this.data[i][j]);
             }
         }
+    }
+    static map(m1, func) {
+        let result = new Matrix(m1.rows, m1.cols);
+        for (let i = 0; i < result.rows; i++) {
+            for (let j = 0; j < result.cols; j++) {
+                result.data[i][j] = func(m1.data[i][j]);
+            }
+        }
+        return result;
     }
     print() {
         console.table(this.data);
