@@ -35,6 +35,38 @@ function prepareData(categories, data, label) {
         }
     }
 }
+function trainEpoch(training) {
+    shuffle(training, true);
+    for (let i = 0; i < training.length; i++) {
+        let data = training[i];
+        let inputs = data.map(e => e / 255);
+        let label = training[i].label;
+
+        let targets = [0, 0, 0];
+        targets[label] = 1;
+        nn.train(inputs, targets);
+    }
+}
+function testAll(testing) {
+    let correct = 0;
+    for (let i = 0; i < testing.length; i++) {
+        let data = testing[i];
+        let inputs = data.map(e => e / 255);
+        let label = testing[i].label;
+        let targets = [0, 0, 0];
+        targets[label] = 1;
+        let guess = nn.predict(inputs);
+        let m = max(guess);
+        let classfication = guess.indexOf(m);
+        // console.log(guess);
+        // console.log(classfication);
+        // console.log(label);
+        if (label === classfication)
+            correct++;
+    }
+    let per = correct / testing.length;
+    return per;
+}
 function setup() {
     createCanvas(280, 280);
     background(0);
@@ -49,22 +81,19 @@ function setup() {
     training = training.concat(rainbows.training);
     training = training.concat(trains.training);
 
-    shuffle(training, true);
-    // console.log(training)
-    for (let i = 0; i < training.length; i++) {
-        let inputs = [];
-        let data = training[i];
-        let label = training[i].label;
-        for (let j = 0; j < len; j++) {
-            inputs[j] = data[j] / 255;
-        }
-        let targets = [0, 0, 0];
-        targets[label] = 1;
-        // console.log(inputs);
-        // console.log(targets);
-        nn.train(inputs, targets);
+    let testing = [];
+    testing = testing.concat(cats.testing);
+    testing = testing.concat(rainbows.testing);
+    testing = testing.concat(trains.testing);
+    for (let i = 0; i < 6; i++) {
+        trainEpoch(training);
+        console.log("TRAINING  EPOCH", i + 1);
+
+        console.log("TESTING");
+        let score = testAll(testing);
+        console.log("Correct : ", score)
     }
-    console.log("1 EPOCH")
+
 
     // let total = 100;
     // for (let n = 0; n < total; n++) {
