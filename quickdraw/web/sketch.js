@@ -39,9 +39,8 @@ function trainEpoch(training) {
     shuffle(training, true);
     for (let i = 0; i < training.length; i++) {
         let data = training[i];
-        let inputs = data.map(e => e / 255);
+        let inputs = Array.from(data).map(e => e / 255);
         let label = training[i].label;
-
         let targets = [0, 0, 0];
         targets[label] = 1;
         nn.train(inputs, targets);
@@ -51,7 +50,7 @@ function testAll(testing) {
     let correct = 0;
     for (let i = 0; i < testing.length; i++) {
         let data = testing[i];
-        let inputs = data.map(e => e / 255);
+        let inputs = Array.from(data).map(e => e / 255);
         let label = testing[i].label;
         let targets = [0, 0, 0];
         targets[label] = 1;
@@ -64,17 +63,25 @@ function testAll(testing) {
         if (label === classfication)
             correct++;
     }
-    let per = correct / testing.length;
+    let per = 100 * correct / testing.length;
     return per;
 }
 function setup() {
     createCanvas(280, 280);
-    background(0);
+    background(255);
     prepareData(cats, cats_data, CAT);
     prepareData(trains, trains_data, TRAIN);
     prepareData(rainbows, rainbows_data, RAINBOW);
 
     nn = new NeuralNetwork(784, 64, 3);
+    // 88.33 % 784, 64, 3
+    // fetch('../data/model.json').then((res) => {
+    //     return res.json()
+    // }).then((data) => {
+    //     nn = NeuralNetwork.deserialize(data);
+    // });
+    // nn.setLearningRate(0.01)
+
 
     let training = [];
     training = training.concat(cats.training);
@@ -85,35 +92,55 @@ function setup() {
     testing = testing.concat(cats.testing);
     testing = testing.concat(rainbows.testing);
     testing = testing.concat(trains.testing);
-    for (let i = 0; i < 6; i++) {
+
+    let epochCounter = 0;
+    let trainButton = select("#train");
+    trainButton.mousePressed(() => {
+        let lr = parseFloat(select("#learningrate").value());
+        nn.setLearningRate(lr);
         trainEpoch(training);
-        console.log("TRAINING  EPOCH", i + 1);
-
-        console.log("TESTING");
+        epochCounter++;
+        console.log("TRAINING  EPOCH", epochCounter);
+    });
+    let testButton = select("#test");
+    testButton.mousePressed(() => {
         let score = testAll(testing);
-        console.log("Correct : ", score)
-    }
+        console.log("Percent : ", nf(score, 2, 2) + "%")
+    })
 
+    let clearButton = select("#clearB");
+    clearButton.mousePressed(() => {
+        background(255);
+    })
 
-    // let total = 100;
-    // for (let n = 0; n < total; n++) {
-    //     let img = createImage(28, 28);
-    //     img.loadPixels();
-    //     let offset = n * 784;
-    //     for (let i = 0; i < 784; i++) {
-    //         let val = 255 - cats_data.bytes[i + offset];
-    //         img.pixels[i * 4 + 0] = val;
-    //         img.pixels[i * 4 + 1] = val;
-    //         img.pixels[i * 4 + 2] = val;
-    //         img.pixels[i * 4 + 3] = 255;
-    //     }
-    //     img.updatePixels();
-    //     let x = (n % 10) * 28;
-    //     let y = floor(n / 10) * 28;
-    //     image(img, x, y);
-
-    // }
+    let guessButton = select("#guess");
+    guessButton.mousePressed(() => {
+        let inputs = [];
+        let img = get();
+        img.resize(28, 28);
+        img.loadPixels();
+        // console.log(img);
+        // img.pixels.length => 3136 RGBA
+        for (let i = 0; i < len; i++) {
+            let brightness = 255 - img.pixels[i * 4];
+            inputs[i] = brightness / 255;
+        }
+        let guess = nn.predict(inputs);
+        let m = max(guess);
+        let classfication = guess.indexOf(m);
+        if (classfication === CAT) {
+            print("CAT");
+        } else if (classfication === TRAIN) {
+            print("TRAIN");
+        } else {
+            print("RAINBOW");
+        }
+        //image(img, 0, 0);
+    })
 }
 function draw() {
-
+    strokeWeight(16);
+    stroke(0);
+    if (mouseIsPressed)
+        line(pmouseX, pmouseY, mouseX, mouseY);
 }

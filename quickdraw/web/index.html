@@ -10,10 +10,25 @@
     <script src="sketch.js"></script>
     <script src="../../lib/nn.js"></script>
     <script src="../../lib/matrix.js"></script>
+
+    <style>
+        body {
+            background-color: #AAA;
+        }
+
+        button {
+            font-size: 24pt;
+            margin: 10px;
+        }
+    </style>
 </head>
 
 <body>
-
+    <button id="train">Train</button>
+    <button id="test">Test</button>
+    <button id="guess">Guess</button><button id="clearB">Clear</button>
+    <input type="number" id="learningrate" value="0.1">
+    <span>Learning Rate</span>
 </body>
 
 
