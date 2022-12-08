@@ -75,12 +75,11 @@ function setup() {
 
     nn = new NeuralNetwork(784, 64, 3);
     // 88.33 % 784, 64, 3
-    // fetch('../data/model.json').then((res) => {
-    //     return res.json()
-    // }).then((data) => {
-    //     nn = NeuralNetwork.deserialize(data);
-    // });
-    // nn.setLearningRate(0.01)
+    fetch('../data/model.json').then((res) => {
+        return res.json()
+    }).then((data) => {
+        nn = NeuralNetwork.deserialize(data);
+    });
 
 
     let training = [];
@@ -111,6 +110,7 @@ function setup() {
     let clearButton = select("#clearB");
     clearButton.mousePressed(() => {
         background(255);
+        select("#guessanswer").html("");
     })
 
     let guessButton = select("#guess");
@@ -128,6 +128,8 @@ function setup() {
         let guess = nn.predict(inputs);
         let m = max(guess);
         let classfication = guess.indexOf(m);
+        let ans = ['CAT', 'RAINBOW', 'TRAIN'];
+        select("#guessanswer").html(ans[classfication]);
         if (classfication === CAT) {
             print("CAT");
         } else if (classfication === TRAIN) {
@@ -135,7 +137,7 @@ function setup() {
         } else {
             print("RAINBOW");
         }
-        //image(img, 0, 0);
+
     })
 }
 function draw() {
