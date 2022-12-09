@@ -1,35 +1,36 @@
 let mobilenet;
-let penguin;
+let video;
+let label;
 
 function modelReady() {
     console.log("Model is ready");
-    mobilenet.predict(penguin, gotResults);
+    mobilenet.predict(gotResults);
 }
 function gotResults(error, results) {
     if (error) {
         console.error(error);
     } else {
-        console.log(results);
-        let label = results[0].label;
-        let prob = results[0].confidence;
-        fill(0);
-        textSize(64);
-        text(label, 10, height - 100);
-        createP(label);
-        createP(prob);
+        //console.log(results);
+        label = results[0].label;
+        // let prob = results[0].confidence;
+
+        // createP(label);
+        // createP(prob);
+        mobilenet.predict(gotResults);
     }
 }
-function imageReady() {
-    console.log("Image is ready");
-    image(penguin, 0, 0, width, height);
-}
+
 function setup() {
-    createCanvas(400, 400);
-    penguin = createImg("image/penguino.jpg", imageReady);
-    penguin.hide();
-    background(0);
-    mobilenet = ml5.imageClassifier('MobileNet', modelReady);
+    createCanvas(640, 550);
+    video = createCapture(VIDEO);
+    video.hide();
+
+    mobilenet = ml5.imageClassifier('MobileNet', video, modelReady);
 }
 function draw() {
-
+    background(0);
+    image(video, 0, 0);
+    fill(255);
+    textSize(32);
+    text(label, 10, height - 20);
 }
