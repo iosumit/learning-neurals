@@ -5,9 +5,14 @@ let label;
 let speakerButton;
 let airpodButton;
 let trainButton;
+let saveButton;
 
 function modelReady() {
     console.log("Model is ready");
+    classifier.load("model.json", customModelReady);
+}
+function customModelReady(params) {
+    console.log("Cutom Model is ready");
 }
 function videoReady() {
     console.log("Video is ready");
@@ -51,6 +56,10 @@ function setup() {
     trainButton = createButton("train");
     trainButton.mousePressed(() => {
         classifier.train(whileTraining);
+    });
+    saveButton = createButton("save");
+    saveButton.mousePressed(() => {
+        classifier.save();
     });
 }
 function draw() {
